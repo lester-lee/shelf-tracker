@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.json({ info: "Demo CRUD API" });
+  res.json({ info: "Shelf Tracker" });
 });
 
 /* Database routes, might be useful later
