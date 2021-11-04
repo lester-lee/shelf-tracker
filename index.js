@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const db = require("./src/db/db");
 
 const PORT = 4000;
 
@@ -24,6 +25,15 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
   res.json({ info: "Shelf Tracker" });
 });
+
+
+//-----------------------------
+// Database Routes
+//-----------------------------
+app.get("/shelving/:id", db.getShelvingById);
+app.get("/shelf/:id", db.getShelfById);
+app.get("/item/:id", db.getItemById);
+app.get("/itemsByShelf/:shelfId", db.getItemsByShelf)
 
 /* Database routes, might be useful later
 
