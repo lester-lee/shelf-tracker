@@ -30,10 +30,14 @@ app.get("/", (req, res) => {
 //-----------------------------
 // Database Routes
 //-----------------------------
+app.get("/shelving/all", db.getAllShelving);
 app.get("/shelving/:id", db.getShelvingById);
+app.get("/shelf/all", db.getAllShelves);
+app.get("/shelf/in/:shelvingId", db.getShelfByShelving);
 app.get("/shelf/:id", db.getShelfById);
+app.get("/item/all", db.getAllItems);
+app.get("/item/in/:shelfId", db.getItemsByShelf)
 app.get("/item/:id", db.getItemById);
-app.get("/itemsByShelf/:shelfId", db.getItemsByShelf)
 
 /* Database routes, might be useful later
 
