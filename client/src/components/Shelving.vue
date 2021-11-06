@@ -1,10 +1,10 @@
 <template>
-  <section class="Shelving">
+  <li class="Shelving">
     <h2 class="ShelvingLabel">{{ shelving.label }}</h2>
     <ol class="ShelvingList">
       <Shelf v-for="shelf in shelves" :key="shelf.shelf_id" :shelf="shelf" />
     </ol>
-  </section>
+  </li>
 </template>
 
 <script>
@@ -37,4 +37,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.Shelving {
+  border: 2px solid $text-color;
+  overflow: auto;
+  max-width: 80vw;
+  margin: 0 auto;
+  &Label {
+    border-bottom: 2px solid $text-color;
+    background-color: $text-color;
+    color: $bg-color;
+  }
+}
+</style>

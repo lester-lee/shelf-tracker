@@ -35,4 +35,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+  .Shelf{
+    border-bottom: 1px solid $text-color;
+    padding: 0;
+    margin: 0;
+    &Label {
+      border-bottom: 1px solid $text-color;
+      background: #888;
+      color: $bg-color;
+    }
+  }
+</style>
