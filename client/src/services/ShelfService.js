@@ -39,6 +39,7 @@ class ShelfService {
   #getShelvesByShelving(shelving_id) {
     return http.get(`/shelf/in/${shelving_id}`);
   }
+
   #getAllItems() {
     return http.get("/item/all");
   }
@@ -55,6 +56,10 @@ class ShelfService {
 
   #addItem(item) {
     return http.post("/item/", item);
+  }
+
+  #updateItem(item) {
+    return http.put("/item/", item);
   }
 
   //-----------------------------
@@ -94,6 +99,10 @@ class ShelfService {
         this.#getItemsByShelf(store, shelfId);
       })
       .catch((e) => console.error(e));
+  }
+
+  updateItem(store, { item }) {
+    this.#updateItem(item).catch((e) => console.error(e));
   }
 }
 

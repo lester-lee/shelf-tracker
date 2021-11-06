@@ -59,12 +59,12 @@ function allRows(tableName) {
   };
 }
 
-const defaultInsertHandler = (response) => (error, result) => {
+const requestHandler = (response, statusCode, message) => (error, result) => {
   if (error) {
     response.status(400).json({ error: error.message });
     return;
   }
-  response.status(201).send("Insert successful.");
+  response.status(statusCode).send(message);
 };
 
 //-----------------------------
@@ -88,7 +88,7 @@ const getAllShelves = allRows("Shelf");
 const addShelf = (request, response) => {
   const { label, shelvingId } = request.body;
   const query = "INSERT INTO Shelf (label, shelving_id) VALUES (?,?)";
-  db.run(query, [label, shelvingId], defaultInsertHandler(response));
+  db.run(query, [label, shelvingId], requestHandler(response));
 };
 
 //-----------------------------
@@ -101,7 +101,22 @@ const getAllItems = allRows("Item");
 const addItem = (request, response) => {
   const { name, shelfId } = request.body;
   const query = "INSERT INTO Item (name, shelf_id) VALUES (?,?)";
-  db.run(query, [name, shelfId], defaultInsertHandler(response));
+  db.run(
+    query,
+    [name, shelfId],
+    requestHandler(response, 201, "Insert successful.")
+  );
+};
+
+const updateItem = (request, response) => {
+  const { itemId, name, highlighted } = request.body;
+  console.debug(itemId, name, highlighted);
+  const query = "UPDATE Item SET name=?, highlighted=? WHERE item_id = ?";
+  db.run(
+    query,
+    [name, highlighted, itemId],
+    requestHandler(response, 200, `Item#${itemId} '${name}' updated.'`)
+  );
 };
 
 module.exports = {
@@ -114,4 +129,5 @@ module.exports = {
   getItemsByShelf,
   getAllItems,
   addItem,
+  updateItem,
 };

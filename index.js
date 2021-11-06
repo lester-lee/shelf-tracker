@@ -26,7 +26,6 @@ app.get("/", (req, res) => {
   res.json({ info: "Shelf Tracker" });
 });
 
-
 //-----------------------------
 // Database Routes
 //-----------------------------
@@ -35,10 +34,11 @@ app.get("/shelving/:id", db.getShelvingById);
 app.get("/shelf/in/:shelvingId", db.getShelvesByShelving);
 app.get("/shelf/:id", db.getShelfById);
 app.get("/item/all", db.getAllItems);
-app.get("/item/in/:shelfId", db.getItemsByShelf)
+app.get("/item/in/:shelfId", db.getItemsByShelf);
 app.get("/item/:id", db.getItemById);
 
-app.post("/item/", db.addItem)
+app.post("/item/", db.addItem);
+app.put("/item/", db.updateItem);
 
 /* Database routes, might be useful later
 
