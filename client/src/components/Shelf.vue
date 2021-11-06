@@ -35,6 +35,10 @@ export default {
   },
   methods: {
     onSubmitNewItem() {
+      if (!this.newItem) {
+        console.info("New item cannot be blank.")
+        return;
+      }
       const shelfId = this.$props.shelf.shelf_id;
       this.$ShelfService.addItem(this.$store, { label: this.newItem, shelfId });
       this.newItem = "";

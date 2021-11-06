@@ -73,6 +73,16 @@ const requestHandler = (response, statusCode, message) => (error, result) => {
 const getShelvingById = getRowByColumn("Shelving", "shelving_id", "id");
 const getAllShelving = allRows("Shelving");
 
+const addShelving = (request, response) => {
+  const { label } = request.body;
+  const query = "INSERT INTO Shelving (label) VALUES (?)";
+  db.run(
+    query,
+    [label],
+    requestHandler(response, 201, `New shelving '${label}' inserted.`)
+  );
+};
+
 //-----------------------------
 // Shelf
 //-----------------------------
@@ -99,29 +109,30 @@ const getItemsByShelf = allRowsByColumn("Item", "shelf_id", "shelfId");
 const getAllItems = allRows("Item");
 
 const addItem = (request, response) => {
-  const { name, shelfId } = request.body;
-  const query = "INSERT INTO Item (name, shelf_id) VALUES (?,?)";
+  const { label, shelfId } = request.body;
+  const query = "INSERT INTO Item (label, shelf_id) VALUES (?,?)";
   db.run(
     query,
-    [name, shelfId],
-    requestHandler(response, 201, "Insert successful.")
+    [label, shelfId],
+    requestHandler(response, 201, `New item '${label}' inserted.`)
   );
 };
 
 const updateItem = (request, response) => {
-  const { itemId, name, highlighted } = request.body;
-  console.debug(itemId, name, highlighted);
-  const query = "UPDATE Item SET name=?, highlighted=? WHERE item_id = ?";
+  const { itemId, label, highlighted } = request.body;
+  console.debug(itemId, label, highlighted);
+  const query = "UPDATE Item SET label=?, highlighted=? WHERE item_id = ?";
   db.run(
     query,
-    [name, highlighted, itemId],
-    requestHandler(response, 200, `Item#${itemId} '${name}' updated.'`)
+    [label, highlighted, itemId],
+    requestHandler(response, 200, `Item#${itemId} '${label}' updated.'`)
   );
 };
 
 module.exports = {
   getShelvingById,
   getAllShelving,
+  addShelving,
   getShelfById,
   getShelvesByShelving,
   getAllShelves,

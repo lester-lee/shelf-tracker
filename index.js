@@ -37,8 +37,9 @@ app.get("/item/all", db.getAllItems);
 app.get("/item/in/:shelfId", db.getItemsByShelf);
 app.get("/item/:id", db.getItemById);
 
-app.post("/item/", db.addItem);
-app.put("/item/", db.updateItem);
+app.post("/shelving", db.addShelving);
+app.post("/item", db.addItem);
+app.put("/item", db.updateItem);
 
 /* Database routes, might be useful later
 

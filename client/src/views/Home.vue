@@ -42,8 +42,12 @@ export default {
   },
   methods: {
     onSubmitNewShelving() {
-      this.$ShelfService.addShelving(this.$store, {label:this.newShelving})
-      console.debug(this.newShelving);
+      if (!this.newShelving) {
+        console.info("New shelving cannot be blank.");
+        return;
+      }
+      this.$ShelfService.addShelving(this.$store, { label: this.newShelving });
+      this.newShelving = "";
     },
   },
 };

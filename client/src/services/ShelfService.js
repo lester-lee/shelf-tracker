@@ -8,8 +8,8 @@ class ShelfService {
     return http.get("/shelving/all");
   }
 
-  #getShelvingById(id) {
-    return http.get(`/shelving/${id}`);
+  #addShelving(shelving) {
+    return http.post("/shelving", shelving)
   }
 
   /**
@@ -65,8 +65,11 @@ class ShelfService {
   //-----------------------------
   // Public methods for components to call
   //-----------------------------
+
+  // Shelving
+
   /**
-   * Consumes the API to get all shelving, and then
+   * Sends API request to get all shelving, and then
    * commits them to store. Once this is done, populate
    * the respective shelves.
    */
@@ -86,12 +89,27 @@ class ShelfService {
   }
 
   /**
+   * Sends API request to add a new shelving; once
+   * this is done, getAllShelving is called to force update
+   */
+  addShelving(store, { label }) {
+    console.debug(`Add new shelving '${label}'`);
+    this.#addShelving({ label })
+      .then(() => {
+        this.getAllShelving(store);
+      })
+      .catch((e) => console.error(e));
+  }
+
+  // Item
+
+  /**
    * Consumes API to add a new item (label, shelfId)
    * If successful, it will clear the newItem text input
    * and update the store with the new shelf information
    */
   addItem(store, { label, shelfId }) {
-    console.debug(`Adding new item '${label}' to shelf#${shelfId}`);
+    console.debug(`Add new item '${label}' to shelf#${shelfId}`);
     this.#addItem({ label, shelfId })
       .then((response) => {
         this.#getItemsByShelf(store, shelfId);
