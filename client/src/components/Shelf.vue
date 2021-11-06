@@ -3,6 +3,9 @@
     <h3 class="ShelfLabel">{{ shelf.label }}</h3>
     <ul class="ShelfList">
       <Item v-for="item in items" :key="item.item_id" :item="item" />
+      <li class="Item">
+        <input class="NewItem" placeholder="New Item" v-model="newItem" />
+      </li>
     </ul>
   </li>
 </template>
@@ -20,6 +23,20 @@ export default {
       items: [],
     };
   },
+  computed: {
+    newItem: {
+      get() {
+        const shelfId = this.$props.shelf.shelf_id;
+        return this.$store.state.newItems[shelfId];
+      },
+      set(newItem) {
+        this.$store.commit("updateNewItem", {
+          shelfId: this.$props.shelf.shelf_id,
+          newItem,
+        });
+      },
+    },
+  },
   methods: {
     getItems() {
       const shelf = this.$props.shelf;
@@ -36,14 +53,14 @@ export default {
 </script>
 
 <style lang="scss">
-  .Shelf{
-    border-bottom: 1px solid $text-color;
-    padding: 0;
-    margin: 0;
-    &Label {
-      border-bottom: 1px solid $text-color;
-      background: #888;
-      color: $bg-color;
-    }
+.Shelf {
+  border-bottom: 1px solid #333;
+  padding: 0;
+  margin: 0;
+  &Label {
+    border-bottom: 1px solid #333;
+    background: #888;
+    color: #fff;
   }
+}
 </style>

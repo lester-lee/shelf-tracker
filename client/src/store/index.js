@@ -1,17 +1,24 @@
 import { createStore } from "vuex";
 import ShelfService from "@/services/ShelfService";
 
+const updateState = (property) => {
+  return function (state, value) {
+    state[property] = value;
+  };
+};
+
 export default createStore({
   state: {
     shelving: [],
     search: "",
+    newItems: {},
   },
   mutations: {
-    setShelving(state, shelving) {
-      state.shelving = shelving;
-    },
-    updateSearch(state, search) {
-      state.search = search;
+    setShelving: updateState("shelving"),
+    updateSearch: updateState("search"),
+    updateNewItem(state, {shelfId, newItem}) {
+      state.newItems[shelfId] = newItem;
+      console.log(state.newItems);
     },
   },
   actions: {

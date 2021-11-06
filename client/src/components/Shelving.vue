@@ -39,14 +39,14 @@ export default {
 
 <style lang="scss">
 .Shelving {
-  border: 2px solid $text-color;
+  border: 2px solid #333;
   overflow: auto;
   max-width: 80vw;
   margin: 0 auto;
   &Label {
-    border-bottom: 2px solid $text-color;
-    background-color: $text-color;
-    color: $bg-color;
+    border-bottom: 2px solid #333;
+    background-color: #333;
+    color: #fff;
   }
 }
 </style>

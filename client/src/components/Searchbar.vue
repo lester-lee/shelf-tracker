@@ -32,7 +32,7 @@ export default {
   position: fixed;
   bottom: 0;
 
-  background: $text-color;
+  background: #333;
 
   display: flex;
   align-items: center;
@@ -43,12 +43,12 @@ export default {
 
     outline: 0;
     border: 0;
-    border-bottom: 1px solid $text-color;
+    border-bottom: 1px solid #333;
     margin-left: 10%;
     padding-left: 20px;
 
     font-size: 1rem;
-    color: $bg-color;
+    color: #fff;
 
     background: #555;
     border-radius: 5px;
