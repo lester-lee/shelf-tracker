@@ -12,6 +12,7 @@
 import { mapState } from "vuex";
 import Shelving from "@/components/Shelving";
 import Searchbar from "@/components/Searchbar";
+import ShelfService from "@/services/ShelfService";
 
 export default {
   name: "Home",
@@ -21,7 +22,13 @@ export default {
   },
   computed: mapState(["shelving"]),
   created() {
-    this.$store.dispatch("getAllShelving");
+    ShelfService.getAllShelving(this.$store);
   },
 };
 </script>
+
+<style lang="scss">
+#ShelfApp{
+  margin-bottom: 80px;
+}
+</style>

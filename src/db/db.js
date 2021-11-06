@@ -29,10 +29,13 @@ function getRowByColumn(tableName, column, paramName) {
   };
 }
 
-function allRowsByColumn(tableName, column, paramName) {
+function allRowsByColumn(tableName, column, paramName, orderBy = null) {
   return (request, response) => {
     const param = parseInt(request.params[paramName]);
-    const query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
+    let query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
+    if (orderBy) {
+      query += ` ORDER BY ${orderBy}`;
+    }
     db.all(query, [param], (error, result) => {
       if (error) {
         response.status(400).json({ error: error.message });
@@ -56,6 +59,14 @@ function allRows(tableName) {
   };
 }
 
+const defaultInsertHandler = (response) => (error, result) => {
+  if (error) {
+    response.status(400).json({ error: error.message });
+    return;
+  }
+  response.status(201).send("Insert successful.");
+};
+
 //-----------------------------
 // Shelving
 //-----------------------------
@@ -69,9 +80,16 @@ const getShelfById = getRowByColumn("Shelf", "shelf_id", "id");
 const getShelvesByShelving = allRowsByColumn(
   "Shelf",
   "shelving_id",
-  "shelvingId"
+  "shelvingId",
+  "position ASC"
 );
 const getAllShelves = allRows("Shelf");
+
+const addShelf = (request, response) => {
+  const { label, shelvingId } = request.body;
+  const query = "INSERT INTO Shelf (label, shelving_id) VALUES (?,?)";
+  db.run(query, [label, shelvingId], defaultInsertHandler(response));
+};
 
 //-----------------------------
 // Item
@@ -79,6 +97,12 @@ const getAllShelves = allRows("Shelf");
 const getItemById = getRowByColumn("Item", "item_id", "id");
 const getItemsByShelf = allRowsByColumn("Item", "shelf_id", "shelfId");
 const getAllItems = allRows("Item");
+
+const addItem = (request, response) => {
+  const { name, shelfId } = request.body;
+  const query = "INSERT INTO Item (name, shelf_id) VALUES (?,?)";
+  db.run(query, [name, shelfId], defaultInsertHandler(response));
+};
 
 module.exports = {
   getShelvingById,
@@ -89,4 +113,5 @@ module.exports = {
   getItemById,
   getItemsByShelf,
   getAllItems,
+  addItem,
 };

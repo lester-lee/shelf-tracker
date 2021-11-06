@@ -9,27 +9,25 @@ const updateState = (property) => {
 
 export default createStore({
   state: {
-    shelving: [],
-    search: "",
-    newItems: {},
+    shelving: {}, // {shelvingId: shelving}
+    shelves: {}, // {shelvingId: shelves}
+    items: {}, // {shelfId: items}
+    newItems: {}, // {shelfId:newItemtext}
+    search: "", // current search term in searchbar
   },
   mutations: {
-    setShelving: updateState("shelving"),
+    updateShelving: updateState("shelving"),
+    updateShelves(state, { shelvingId, shelves }) {
+      state.shelves[shelvingId] = shelves;
+    },
+    updateItems(state, { shelfId, items }) {
+      state.items[shelfId] = items;
+    },
     updateSearch: updateState("search"),
-    updateNewItem(state, {shelfId, newItem}) {
+    updateNewItem(state, { shelfId, newItem }) {
       state.newItems[shelfId] = newItem;
-      console.log(state.newItems);
     },
   },
-  actions: {
-    getAllShelving({ commit }) {
-      console.log("Get all shelving.");
-      ShelfService.getAllShelving()
-        .then((response) => {
-          commit("setShelving", response.data);
-        })
-        .catch((e) => console.log(e));
-    },
-  },
+  actions: {},
   modules: {},
 });

@@ -8,31 +8,17 @@
 </template>
 
 <script>
-import ShelfService from "@/services/ShelfService";
 import Shelf from "./Shelf";
 
 export default {
   name: "Shelving",
   props: ["shelving"],
   components: { Shelf },
-  data() {
-    return {
-      shelves: [],
-    };
-  },
-  methods: {
-    getShelves() {
-      const shelving = this.$props.shelving;
-      console.log(
-        `Get all shelves from shelving ${shelving.label}#${shelving.shelving_id}`
-      );
-      ShelfService.getShelvesByShelving(shelving.shelving_id)
-        .then((response) => (this.shelves = response.data))
-        .catch((e) => console.log(e));
+  computed: {
+    shelves() {
+      const shelvingId = this.$props.shelving.shelving_id;
+      return this.$store.state.shelves[shelvingId];
     },
-  },
-  created() {
-    this.getShelves();
   },
 };
 </script>
