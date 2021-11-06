@@ -9,7 +9,7 @@ class ShelfService {
   }
 
   #addShelving(shelving) {
-    return http.post("/shelving", shelving)
+    return http.post("/shelving", shelving);
   }
 
   /**
@@ -38,6 +38,10 @@ class ShelfService {
 
   #getShelvesByShelving(shelving_id) {
     return http.get(`/shelf/in/${shelving_id}`);
+  }
+
+  #addShelf(shelf) {
+    return http.post("/shelf", shelf);
   }
 
   #getAllItems() {
@@ -97,6 +101,19 @@ class ShelfService {
     this.#addShelving({ label })
       .then(() => {
         this.getAllShelving(store);
+      })
+      .catch((e) => console.error(e));
+  }
+
+  /**
+   * Sends API request to add a new shelf; once
+   * this is done, getAllShelves is called to force update
+   */
+  addShelf(store, { label, shelvingId }) {
+    console.debug(`Add new shelf '${label}' to shelving#${shelvingId}`);
+    this.#addShelf({ label, shelvingId })
+      .then(() => {
+        this.#getAllShelves(store);
       })
       .catch((e) => console.error(e));
   }

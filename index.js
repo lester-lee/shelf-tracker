@@ -38,6 +38,7 @@ app.get("/item/in/:shelfId", db.getItemsByShelf);
 app.get("/item/:id", db.getItemById);
 
 app.post("/shelving", db.addShelving);
+app.post("/shelf", db.addShelf);
 app.post("/item", db.addItem);
 app.put("/item", db.updateItem);
 

@@ -90,15 +90,18 @@ const getShelfById = getRowByColumn("Shelf", "shelf_id", "id");
 const getShelvesByShelving = allRowsByColumn(
   "Shelf",
   "shelving_id",
-  "shelvingId",
-  "position ASC"
+  "shelvingId"
 );
 const getAllShelves = allRows("Shelf");
 
 const addShelf = (request, response) => {
   const { label, shelvingId } = request.body;
   const query = "INSERT INTO Shelf (label, shelving_id) VALUES (?,?)";
-  db.run(query, [label, shelvingId], requestHandler(response));
+  db.run(
+    query,
+    [label, shelvingId],
+    requestHandler(response, 201, `New shelf '${label}' inserted.`)
+  );
 };
 
 //-----------------------------
@@ -136,6 +139,7 @@ module.exports = {
   getShelfById,
   getShelvesByShelving,
   getAllShelves,
+  addShelf,
   getItemById,
   getItemsByShelf,
   getAllItems,
