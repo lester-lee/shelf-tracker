@@ -66,7 +66,7 @@ const getAllShelving = allRows("Shelving");
 // Shelf
 //-----------------------------
 const getShelfById = getRowByColumn("Shelf", "shelf_id", "id");
-const getShelfByShelving = allRowsByColumn(
+const getShelvesByShelving = allRowsByColumn(
   "Shelf",
   "shelving_id",
   "shelvingId"
@@ -84,7 +84,7 @@ module.exports = {
   getShelvingById,
   getAllShelving,
   getShelfById,
-  getShelfByShelving,
+  getShelvesByShelving,
   getAllShelves,
   getItemById,
   getItemsByShelf,

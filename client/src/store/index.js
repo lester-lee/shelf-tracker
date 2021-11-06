@@ -12,12 +12,13 @@ export default createStore({
   },
   actions: {
     getAllShelving({ commit }) {
+      console.log("Get all shelving.")
       ShelfService.getAllShelving()
         .then((response) => {
           commit("setShelving", response.data);
         })
         .catch((e) => console.log(e));
-    },
+    }
   },
   modules: {},
 });
