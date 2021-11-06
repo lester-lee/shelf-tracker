@@ -1,9 +1,9 @@
 <template>
   <main id="ShelfApp">
-    <Searchbar />
     <ul id="ShelvingWrapper">
       <Shelving v-for="s in shelving" :key="s.shelving_id" :shelving="s" />
     </ul>
+    <Searchbar />
   </main>
 </template>
 

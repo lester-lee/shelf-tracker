@@ -1,33 +1,57 @@
 <template>
-  <input class="Searchbar" placeholder="Search for..." />
+  <footer class="Searchbar">
+    <input
+      class="SearchbarInput"
+      placeholder="Search for..."
+      v-model="search"
+    />
+  </footer>
 </template>
 
 <script>
 export default {
   name: "Searchbar",
-  
+  computed: {
+    search: {
+      get() {
+        return this.$store.state.search;
+      },
+      set(search) {
+        this.$store.commit("updateSearch", search);
+      },
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 .Searchbar {
-  box-sizing: border-box;
-  width: 80vw;
-  height: 40px;
+  width: 100%;
+  height: 50px;
 
-  margin: 0 auto;
-  margin-bottom: 20px;
-  padding-left: 10px;
+  position: fixed;
+  bottom: 0;
 
-  outline: 0;
-  border: 0;
-  border-bottom: 1px solid $text-color;
+  background: $text-color;
 
-  font-size: 1rem;
-  color: $accent-color;
+  display: flex;
+  align-items: center;
 
-  &:active {
-    border-bottom: 2px solid $accent-color;
+  &Input {
+    width: 70%;
+    height: 30px;
+
+    outline: 0;
+    border: 0;
+    border-bottom: 1px solid $text-color;
+    margin-left: 10%;
+    padding-left: 20px;
+
+    font-size: 1rem;
+    color: $bg-color;
+
+    background: #555;
+    border-radius: 5px;
   }
 }
 </style>
