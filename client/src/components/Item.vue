@@ -1,6 +1,6 @@
 <template>
   <li :class="['Item', { '--Highlight': highlighted }]" v-show="show">
-    <span>{{ item.name }}</span>
+    <span>{{ item.label }}</span>
     <input type="checkbox" v-model="highlighted" />
   </li>
 </template>
@@ -23,9 +23,9 @@ export default {
       },
     },
     show() {
-      const name = this.$props.item.name.toLowerCase();
+      const label = this.$props.item.label.toLowerCase();
       const search = this.$store.state.search.toLowerCase();
-      return name.includes(search);
+      return label.includes(search);
     },
   },
 };

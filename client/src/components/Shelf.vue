@@ -36,7 +36,7 @@ export default {
   methods: {
     onSubmitNewItem() {
       const shelfId = this.$props.shelf.shelf_id;
-      this.$ShelfService.addItem(this.$store, { name: this.newItem, shelfId });
+      this.$ShelfService.addItem(this.$store, { label: this.newItem, shelfId });
       this.newItem = "";
     },
   },

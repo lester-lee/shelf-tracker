@@ -42,6 +42,7 @@ export default {
   },
   methods: {
     onSubmitNewShelving() {
+      this.$ShelfService.addShelving(this.$store, {label:this.newShelving})
       console.debug(this.newShelving);
     },
   },

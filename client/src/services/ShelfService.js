@@ -86,13 +86,13 @@ class ShelfService {
   }
 
   /**
-   * Consumes API to add a new item (name, shelfId)
+   * Consumes API to add a new item (label, shelfId)
    * If successful, it will clear the newItem text input
    * and update the store with the new shelf information
    */
-  addItem(store, { name, shelfId }) {
-    console.debug(`Adding new item '${name}' to shelf#${shelfId}`);
-    this.#addItem({ name, shelfId })
+  addItem(store, { label, shelfId }) {
+    console.debug(`Adding new item '${label}' to shelf#${shelfId}`);
+    this.#addItem({ label, shelfId })
       .then((response) => {
         this.#getItemsByShelf(store, shelfId);
       })
