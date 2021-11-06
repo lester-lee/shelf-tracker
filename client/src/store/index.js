@@ -1,5 +1,4 @@
 import { createStore } from "vuex";
-import ShelfService from "@/services/ShelfService";
 
 const updateState = (property) => {
   return function (state, value) {

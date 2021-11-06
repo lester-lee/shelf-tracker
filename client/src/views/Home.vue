@@ -2,6 +2,16 @@
   <main id="ShelfApp">
     <ul id="ShelvingWrapper">
       <Shelving v-for="s in shelving" :key="s.shelving_id" :shelving="s" />
+      <li class="Shelving">
+        <h2 class="ShelvingLabel">
+          <input
+            class="ShelvingAdd"
+            placeholder="+ Add Shelving"
+            v-model="newShelving"
+            v-on:keypress.enter="onSubmitNewShelving"
+          />
+        </h2>
+      </li>
     </ul>
     <Searchbar />
   </main>
@@ -12,7 +22,6 @@
 import { mapState } from "vuex";
 import Shelving from "@/components/Shelving";
 import Searchbar from "@/components/Searchbar";
-import ShelfService from "@/services/ShelfService";
 
 export default {
   name: "Home",
@@ -20,15 +29,27 @@ export default {
     Shelving,
     Searchbar,
   },
-  computed: mapState(["shelving"]),
+  data() {
+    return {
+      newShelving: "",
+    };
+  },
+  computed: {
+    ...mapState(["shelving"]),
+  },
   created() {
-    ShelfService.getAllShelving(this.$store);
+    this.$ShelfService.getAllShelving(this.$store);
+  },
+  methods: {
+    onSubmitNewShelving() {
+      console.debug(this.newShelving);
+    },
   },
 };
 </script>
 
 <style lang="scss">
-#ShelfApp{
+#ShelfApp {
   margin-bottom: 80px;
 }
 </style>

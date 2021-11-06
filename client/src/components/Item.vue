@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import ShelfService from "@/services/ShelfService";
 export default {
   name: "Item",
   props: ["item"],
@@ -20,7 +19,7 @@ export default {
         let item = this.$props.item;
         item.itemId = item.item_id;
         item.highlighted = highlight;
-        ShelfService.updateItem(this.$store, { item });
+        this.$ShelfService.updateItem(this.$store, { item });
       },
     },
     show() {

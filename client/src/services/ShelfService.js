@@ -90,12 +90,10 @@ class ShelfService {
    * If successful, it will clear the newItem text input
    * and update the store with the new shelf information
    */
-  addItem(store, { shelfId }) {
-    const name = store.state.newItems[shelfId];
+  addItem(store, { name, shelfId }) {
     console.debug(`Adding new item '${name}' to shelf#${shelfId}`);
     this.#addItem({ name, shelfId })
       .then((response) => {
-        store.commit("updateNewItem", { shelfId, newItem: "" });
         this.#getItemsByShelf(store, shelfId);
       })
       .catch((e) => console.error(e));
