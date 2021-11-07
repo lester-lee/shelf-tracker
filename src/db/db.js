@@ -46,6 +46,22 @@ function allRowsByColumn(tableName, column, paramName, orderBy = null) {
   };
 }
 
+function deleteRowsByColumn(tableName, column, paramName) {
+  return (request, response) => {
+    const param = parseInt(request.params[paramName]);
+    const query = `DELETE FROM ${tableName} WHERE ${column} = ?`;
+    db.run(
+      query,
+      [param],
+      requestHandler(
+        response,
+        200,
+        `Deletion successful from table ${tableName} by ${column} with value ${param}`
+      )
+    );
+  };
+}
+
 function allRows(tableName) {
   return (request, response) => {
     const query = `SELECT * FROM ${tableName}`;
@@ -93,6 +109,7 @@ const getShelvesByShelving = allRowsByColumn(
   "shelvingId"
 );
 const getAllShelves = allRows("Shelf");
+const deleteShelf = deleteRowsByColumn("Shelf", "shelf_id", "shelfId");
 
 const addShelf = (request, response) => {
   const { label, shelvingId } = request.body;
@@ -110,6 +127,8 @@ const addShelf = (request, response) => {
 const getItemById = getRowByColumn("Item", "item_id", "id");
 const getItemsByShelf = allRowsByColumn("Item", "shelf_id", "shelfId");
 const getAllItems = allRows("Item");
+const deleteItem = deleteRowsByColumn("Item", "item_id", "itemId");
+const deleteItemsByShelf = deleteRowsByColumn("Item", "shelf_id", "shelfId");
 
 const addItem = (request, response) => {
   const { label, shelfId } = request.body;
@@ -127,32 +146,27 @@ const updateItem = (request, response) => {
   db.run(
     query,
     [label, highlighted, itemId],
-    requestHandler(response, 200, `Item#${itemId} '${label}' updated.'`)
-  );
-};
-
-const deleteItem = (request, response) => {
-  const itemId = parseInt(request.params.itemId);
-  const query = "DELETE FROM Item WHERE item_id = ?";
-  db.run(
-    query,
-    [itemId],
-    requestHandler(response, 200, `Item#${itemId} deleted.`)
+    requestHandler(response, 200, `Item#${itemId} '${label}' updated.`)
   );
 };
 
 module.exports = {
+  // Shelving
   getShelvingById,
   getAllShelving,
   addShelving,
+  // Shelf
   getShelfById,
   getShelvesByShelving,
   getAllShelves,
   addShelf,
+  deleteShelf,
+  // Item
   getItemById,
   getItemsByShelf,
   getAllItems,
   addItem,
   updateItem,
   deleteItem,
+  deleteItemsByShelf,
 };

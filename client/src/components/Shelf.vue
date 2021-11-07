@@ -1,6 +1,9 @@
 <template>
   <li class="Shelf">
-    <h3 class="ShelfLabel">{{ shelf.label }}</h3>
+    <h3 class="ShelfLabel">
+      <span>{{ shelf.label }}</span>
+      <button class="ShelfDelete" v-on:click="deleteShelf">✖</button>
+    </h3>
     <ul class="ShelfList">
       <Item v-for="item in items" :key="item.item_id" :item="item" />
       <li class="Item">
@@ -36,12 +39,16 @@ export default {
   methods: {
     onSubmitNewItem() {
       if (!this.newItem) {
-        console.info("New item cannot be blank.")
+        console.info("New item cannot be blank.");
         return;
       }
       const shelfId = this.$props.shelf.shelf_id;
       this.$ShelfService.addItem(this.$store, { label: this.newItem, shelfId });
       this.newItem = "";
+    },
+    deleteShelf() {
+      const shelfId = this.$props.shelf.shelf_id;
+      this.$ShelfService.deleteShelf(this.$store, { shelfId });
     },
   },
 };

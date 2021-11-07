@@ -39,23 +39,11 @@ app.get("/item/:id", db.getItemById);
 
 app.post("/shelving", db.addShelving);
 app.post("/shelf", db.addShelf);
+app.delete("/shelf/:shelfId", db.deleteShelf);
 app.post("/item", db.addItem);
 app.put("/item", db.updateItem);
 app.delete("/item/:itemId", db.deleteItem);
-
-/* Database routes, might be useful later
-
-app.get("/users", db.getUsers);
-app.get("/users/:id", db.getUserById);
-app.post("/users", db.createUser);
-app.delete("/users/:id", db.deleteUser);
-
-app.get("/todos", db.getTodos);
-app.post("/todos", db.addTodo);
-app.delete("/todos/:id", db.deleteTodo)
-app.put("/todos", db.updateTodo)
-
-*/
+app.delete("/item/in/:shelfId", db.deleteItemsByShelf);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

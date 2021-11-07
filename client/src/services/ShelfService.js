@@ -4,6 +4,8 @@ class ShelfService {
   //-----------------------------
   // Private API client methods
   //-----------------------------
+
+  // Shelving
   #getAllShelving() {
     return http.get("/shelving/all");
   }
@@ -11,6 +13,8 @@ class ShelfService {
   #addShelving(shelving) {
     return http.post("/shelving", shelving);
   }
+
+  // Shelf
 
   /**
    * For each shelving, get respective shelves and commit to store.
@@ -44,9 +48,11 @@ class ShelfService {
     return http.post("/shelf", shelf);
   }
 
-  #getAllItems() {
-    return http.get("/item/all");
+  #deleteShelf(shelfId) {
+    return http.delete(`/shelf/${shelfId}`);
   }
+
+  // Item
 
   #getItemsByShelf(store, shelfId) {
     http
@@ -68,6 +74,10 @@ class ShelfService {
 
   #deleteItem(itemId) {
     return http.delete(`/item/${itemId}`);
+  }
+
+  #deleteItemsByShelf(shelfId) {
+    return http.delete(`/item/in/${shelfId}`);
   }
 
   //-----------------------------
@@ -122,6 +132,16 @@ class ShelfService {
       .catch((e) => console.error(e));
   }
 
+  deleteShelf(store, { shelfId }) {
+    this.#deleteShelf(shelfId)
+      .then((response) => {
+        console.debug(response.data);
+        this.#deleteItemsByShelf(shelfId);
+        this.#getAllShelves(store);
+      })
+      .catch((e) => console.error(e));
+  }
+
   // Item
 
   /**
@@ -130,21 +150,24 @@ class ShelfService {
    * and update the store with the new shelf information
    */
   addItem(store, { label, shelfId }) {
-    console.debug(`Add new item '${label}' to shelf#${shelfId}`);
     this.#addItem({ label, shelfId })
       .then((response) => {
+        console.debug(response.data);
         this.#getItemsByShelf(store, shelfId);
       })
       .catch((e) => console.error(e));
   }
 
   updateItem(store, { item }) {
-    this.#updateItem(item).catch((e) => console.error(e));
+    this.#updateItem(item)
+      .then((response) => console.debug(response.data))
+      .catch((e) => console.error(e));
   }
 
   deleteItem(store, { itemId, shelfId }) {
     this.#deleteItem(itemId)
-      .then(() => {
+      .then((response) => {
+        console.debug(response.data);
         this.#getItemsByShelf(store, shelfId);
       })
       .catch((e) => console.error(e));
