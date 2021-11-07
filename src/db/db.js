@@ -90,11 +90,15 @@ const requestHandler = (response, statusCode, message) => (error, result) => {
 //-----------------------------
 const getShelvingById = getRowByColumn("Shelving", "shelving_id", "id");
 const getAllShelving = allRows("Shelving");
-const deleteShelving = deleteRowsByColumn(
-  "Shelving",
-  "shelving_id",
-  "shelvingId"
-);
+const deleteShelving = (request, response) => {
+  const shelvingId = parseInt(request.params.shelvingId);
+  deleteShelvesByShelving(shelvingId);
+  deleteRowsByColumn(
+    "Shelving",
+    "shelving_id",
+    "shelvingId"
+  )(request, response);
+};
 
 const addShelving = (request, response) => {
   const { label } = request.body;
@@ -120,14 +124,34 @@ const deleteShelf = (request, response) => {
   const shelfId = parseInt(request.params.shelfId);
   deleteRowsByColumn("Shelf", "shelf_id", "shelfId")(request, response);
   deleteItemsByShelf(shelfId);
-  console.debug(`Deletion successful of shelf#${shelfId} and all items in it.`);
 };
 
-const deleteShelvesByShelving = deleteRowsByColumn(
-  "Shelf",
-  "shelving_id",
-  "shelvingId"
-);
+const deleteShelvesByShelving = (shelvingId) => {
+  // Get all shelves in shelving
+  const queryShelves = "SELECT * FROM Shelf WHERE shelving_id = ?";
+  db.all(queryShelves, [shelvingId], (error, result) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    // Delete items from all shelves in shelving
+    result.forEach((shelf) => {
+      deleteItemsByShelf(shelf.shelf_id);
+    });
+  });
+
+  // Delete those shelves
+  const query = "DELETE FROM Shelf WHERE shelving_id = ?";
+  db.run(query, [shelvingId], (error, result) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    console.debug(
+      `Deletion successful of all shelves in shelving#${shelvingId}`
+    );
+  });
+};
 
 const addShelf = (request, response) => {
   const { label, shelvingId } = request.body;
@@ -152,7 +176,7 @@ const deleteItemsByShelf = (shelfId) => {
   const query = `DELETE FROM Item WHERE shelf_id = ?`;
   db.run(query, [shelfId], (error, result) => {
     if (error) {
-      console.error(error);
+      console.error(error.message);
     }
   });
 };
