@@ -2,6 +2,28 @@ const http = require("@/http-common");
 
 class ShelfService {
   //-----------------------------
+  // Utility
+  //-----------------------------
+
+  #get(endpoint) {
+    return (param) => {
+      return http.get(`${endpoint}/${param}`);
+    };
+  }
+
+  #post(endpoint) {
+    return (param) => {
+      return http.post(endpoint, param);
+    };
+  }
+
+  #delete(endpoint) {
+    return (param) => {
+      return http.delete(`${endpoint}/${param}`);
+    };
+  }
+
+  //-----------------------------
   // Private API client methods
   //-----------------------------
 
@@ -10,9 +32,8 @@ class ShelfService {
     return http.get("/shelving/all");
   }
 
-  #addShelving(shelving) {
-    return http.post("/shelving", shelving);
-  }
+  #addShelving = this.#post("/shelving");
+  #deleteShelving = this.#delete("/shelving");
 
   // Shelf
 
@@ -40,17 +61,10 @@ class ShelfService {
     });
   }
 
-  #getShelvesByShelving(shelving_id) {
-    return http.get(`/shelf/in/${shelving_id}`);
-  }
+  #getShelvesByShelving = this.#get("/shelf/in");
 
-  #addShelf(shelf) {
-    return http.post("/shelf", shelf);
-  }
-
-  #deleteShelf(shelfId) {
-    return http.delete(`/shelf/${shelfId}`);
-  }
+  #addShelf = this.#post("/shelf");
+  #deleteShelf = this.#delete("/shelf");
 
   // Item
 
@@ -64,21 +78,13 @@ class ShelfService {
       .catch((e) => console.error(e));
   }
 
-  #addItem(item) {
-    return http.post("/item/", item);
-  }
-
   #updateItem(item) {
     return http.put("/item/", item);
   }
 
-  #deleteItem(itemId) {
-    return http.delete(`/item/${itemId}`);
-  }
-
-  #deleteItemsByShelf(shelfId) {
-    return http.delete(`/item/in/${shelfId}`);
-  }
+  #addItem = this.#post("/item");
+  #deleteItem = this.#delete("/item");
+  #deleteItemsByShelf = this.#delete("/item/in");
 
   //-----------------------------
   // Public methods for components to call
@@ -111,10 +117,20 @@ class ShelfService {
    * this is done, getAllShelving is called to force update
    */
   addShelving(store, { label }) {
-    console.debug(`Add new shelving '${label}'`);
     this.#addShelving({ label })
-      .then(() => {
+      .then((response) => {
+        console.debug(response.data);
         this.getAllShelving(store);
+      })
+      .catch((e) => console.error(e));
+  }
+
+  deleteShelving(store, { shelvingId }) {
+    this.#deleteShelving(shelvingId)
+      .then((response) => {
+        console.debug(response.data);
+        //this.#deleteShelvesByShelving(shelving_id);
+        //this.getAllShelving(store);
       })
       .catch((e) => console.error(e));
   }

@@ -1,6 +1,9 @@
 <template>
   <li class="Shelving">
-    <h2 class="ShelvingLabel">{{ shelving.label }}</h2>
+    <h2 class="ShelvingLabel">
+      {{ shelving.label }}
+      <button class="ShelvingDelete" v-on:click="deleteShelving">✖</button>
+    </h2>
     <ol class="ShelvingList">
       <Shelf v-for="shelf in shelves" :key="shelf.shelf_id" :shelf="shelf" />
       <li class="Shelf">
@@ -47,6 +50,10 @@ export default {
         shelvingId,
       });
       this.newShelf = "";
+    },
+    deleteShelving() {
+      const shelvingId = this.$props.shelving.shelving_id;
+      this.$ShelfService.deleteShelving(this.$store, { shelvingId });
     },
   },
 };
