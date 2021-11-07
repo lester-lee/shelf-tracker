@@ -62,7 +62,7 @@ class ShelfService {
   }
 
   #getShelvesByShelving = this.#get("/shelf/in");
-
+  #deleteShelvesByShelving = this.#delete("/shelf/in");
   #addShelf = this.#post("/shelf");
   #deleteShelf = this.#delete("/shelf");
 
@@ -119,7 +119,6 @@ class ShelfService {
   addShelving(store, { label }) {
     this.#addShelving({ label })
       .then((response) => {
-        console.debug(response.data);
         this.getAllShelving(store);
       })
       .catch((e) => console.error(e));
@@ -128,9 +127,8 @@ class ShelfService {
   deleteShelving(store, { shelvingId }) {
     this.#deleteShelving(shelvingId)
       .then((response) => {
-        console.debug(response.data);
-        //this.#deleteShelvesByShelving(shelving_id);
-        //this.getAllShelving(store);
+        this.#deleteShelvesByShelving(shelvingId);
+        this.getAllShelving(store);
       })
       .catch((e) => console.error(e));
   }
@@ -140,7 +138,6 @@ class ShelfService {
    * this is done, getAllShelves is called to force update
    */
   addShelf(store, { label, shelvingId }) {
-    console.debug(`Add new shelf '${label}' to shelving#${shelvingId}`);
     this.#addShelf({ label, shelvingId })
       .then(() => {
         this.#getAllShelves(store);
@@ -148,11 +145,14 @@ class ShelfService {
       .catch((e) => console.error(e));
   }
 
+  /**
+   * Send API request to delete shelf#shelfId,
+   * then force update by calling getAllShelves
+   */
   deleteShelf(store, { shelfId }) {
     this.#deleteShelf(shelfId)
       .then((response) => {
-        console.debug(response.data);
-        this.#deleteItemsByShelf(shelfId);
+        //this.#deleteItemsByShelf(shelfId);
         this.#getAllShelves(store);
       })
       .catch((e) => console.error(e));
@@ -168,22 +168,18 @@ class ShelfService {
   addItem(store, { label, shelfId }) {
     this.#addItem({ label, shelfId })
       .then((response) => {
-        console.debug(response.data);
         this.#getItemsByShelf(store, shelfId);
       })
       .catch((e) => console.error(e));
   }
 
   updateItem(store, { item }) {
-    this.#updateItem(item)
-      .then((response) => console.debug(response.data))
-      .catch((e) => console.error(e));
+    this.#updateItem(item).catch((e) => console.error(e));
   }
 
   deleteItem(store, { itemId, shelfId }) {
     this.#deleteItem(itemId)
       .then((response) => {
-        console.debug(response.data);
         this.#getItemsByShelf(store, shelfId);
       })
       .catch((e) => console.error(e));

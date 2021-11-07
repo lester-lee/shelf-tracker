@@ -77,9 +77,11 @@ function allRows(tableName) {
 
 const requestHandler = (response, statusCode, message) => (error, result) => {
   if (error) {
+    console.error(error.message);
     response.status(400).json({ error: error.message });
     return;
   }
+  console.debug(message);
   response.status(statusCode).send(message);
 };
 
@@ -88,6 +90,11 @@ const requestHandler = (response, statusCode, message) => (error, result) => {
 //-----------------------------
 const getShelvingById = getRowByColumn("Shelving", "shelving_id", "id");
 const getAllShelving = allRows("Shelving");
+const deleteShelving = deleteRowsByColumn(
+  "Shelving",
+  "shelving_id",
+  "shelvingId"
+);
 
 const addShelving = (request, response) => {
   const { label } = request.body;
@@ -109,7 +116,18 @@ const getShelvesByShelving = allRowsByColumn(
   "shelvingId"
 );
 const getAllShelves = allRows("Shelf");
-const deleteShelf = deleteRowsByColumn("Shelf", "shelf_id", "shelfId");
+const deleteShelf = (request, response) => {
+  const shelfId = parseInt(request.params.shelfId);
+  deleteRowsByColumn("Shelf", "shelf_id", "shelfId")(request, response);
+  deleteItemsByShelf(shelfId);
+  console.debug(`Deletion successful of shelf#${shelfId} and all items in it.`);
+};
+
+const deleteShelvesByShelving = deleteRowsByColumn(
+  "Shelf",
+  "shelving_id",
+  "shelvingId"
+);
 
 const addShelf = (request, response) => {
   const { label, shelvingId } = request.body;
@@ -128,7 +146,16 @@ const getItemById = getRowByColumn("Item", "item_id", "id");
 const getItemsByShelf = allRowsByColumn("Item", "shelf_id", "shelfId");
 const getAllItems = allRows("Item");
 const deleteItem = deleteRowsByColumn("Item", "item_id", "itemId");
-const deleteItemsByShelf = deleteRowsByColumn("Item", "shelf_id", "shelfId");
+//const deleteItemsByShelf = deleteRowsByColumn("Item", "shelf_id", "shelfId");
+const deleteItemsByShelf = (shelfId) => {
+  console.debug(`Deleting all items in shelf#${shelfId}`);
+  const query = `DELETE FROM Item WHERE shelf_id = ?`;
+  db.run(query, [shelfId], (error, result) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+};
 
 const addItem = (request, response) => {
   const { label, shelfId } = request.body;
@@ -155,12 +182,14 @@ module.exports = {
   getShelvingById,
   getAllShelving,
   addShelving,
+  deleteShelving,
   // Shelf
   getShelfById,
   getShelvesByShelving,
   getAllShelves,
   addShelf,
   deleteShelf,
+  deleteShelvesByShelving,
   // Item
   getItemById,
   getItemsByShelf,
