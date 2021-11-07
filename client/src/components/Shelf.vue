@@ -38,10 +38,12 @@ export default {
   },
   methods: {
     onSubmitNewItem() {
+      // Prevent from submitting if new item is blank
       if (!this.newItem) {
         console.info("New item cannot be blank.");
         return;
       }
+      // Add item and reset to blank
       const shelfId = this.$props.shelf.shelf_id;
       this.$ShelfService.addItem(this.$store, { label: this.newItem, shelfId });
       this.newItem = "";

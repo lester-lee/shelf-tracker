@@ -1,48 +1,39 @@
 const http = require("@/http-common");
 
+/**
+ * ShelfService is responsible for handling
+ * all API requests; it also communicates with
+ * the Vuex store with this updated information.
+ */
 class ShelfService {
   //-----------------------------
   // Utility
   //-----------------------------
 
-  #get(endpoint) {
-    return (param) => {
-      return http.get(`${endpoint}/${param}`);
-    };
-  }
-
-  #post(endpoint) {
-    return (param) => {
-      return http.post(endpoint, param);
-    };
-  }
-
-  #delete(endpoint) {
-    return (param) => {
-      return http.delete(`${endpoint}/${param}`);
-    };
-  }
+  #get = (endpoint) => (param) => http.get(`${endpoint}/${param}`);
+  #post = (endpoint) => (param) => http.post(endpoint, param);
+  #put = (endpoint) => (param) => http.put(endpoint, param);
+  #delete = (endpoint) => (param) => http.delete(`${endpoint}/${param}`);
 
   //-----------------------------
   // Private API client methods
   //-----------------------------
 
   // Shelving
-  #getAllShelving() {
-    return http.get("/shelving/all");
-  }
-
+  #getAllShelving = () => this.#get("/shelving")("all");
   #addShelving = this.#post("/shelving");
   #deleteShelving = this.#delete("/shelving");
 
   // Shelf
+  #getShelvesByShelving = this.#get("/shelf/in");
+  #addShelf = this.#post("/shelf");
+  #deleteShelf = this.#delete("/shelf");
 
   /**
    * For each shelving, get respective shelves and commit to store.
    * This also populates the shelves with respective items.
    */
-  #getAllShelves(store) {
-    console.debug("Get all shelves");
+  #getAllShelves = (store) => {
     // For each shelvingId, get shelves and commit them to store
     Object.keys(store.state.shelving).forEach((shelvingId) => {
       this.#getShelvesByShelving(shelvingId)
@@ -59,16 +50,14 @@ class ShelfService {
         })
         .catch((e) => console.error(e));
     });
-  }
-
-  #getShelvesByShelving = this.#get("/shelf/in");
-  #deleteShelvesByShelving = this.#delete("/shelf/in");
-  #addShelf = this.#post("/shelf");
-  #deleteShelf = this.#delete("/shelf");
+  };
 
   // Item
+  #addItem = this.#post("/item");
+  #updateItem = this.#put("/item");
+  #deleteItem = this.#delete("/item");
 
-  #getItemsByShelf(store, shelfId) {
+  #getItemsByShelf = (store, shelfId) => {
     http
       .get(`/item/in/${shelfId}`)
       .then((response) => {
@@ -76,29 +65,21 @@ class ShelfService {
         store.commit("updateItems", { shelfId, items });
       })
       .catch((e) => console.error(e));
-  }
-
-  #updateItem(item) {
-    return http.put("/item/", item);
-  }
-
-  #addItem = this.#post("/item");
-  #deleteItem = this.#delete("/item");
-  #deleteItemsByShelf = this.#delete("/item/in");
+  };
 
   //-----------------------------
-  // Public methods for components to call
+  // Component Methods
   //-----------------------------
+  // These methods all send requests to get/add/update/delete,
+  // then force rerenders by committing to the store
 
   // Shelving
-
   /**
    * Sends API request to get all shelving, and then
    * commits them to store. Once this is done, populate
    * the respective shelves.
    */
   getAllShelving(store) {
-    console.debug("Get all shelving");
     this.#getAllShelving()
       .then((response) => {
         // Convert list of shelvings into {id: shelving}
@@ -112,10 +93,6 @@ class ShelfService {
       .catch((e) => console.error(e));
   }
 
-  /**
-   * Sends API request to add a new shelving; once
-   * this is done, getAllShelving is called to force update
-   */
   addShelving(store, { label }) {
     this.#addShelving({ label })
       .then((response) => {
@@ -127,16 +104,12 @@ class ShelfService {
   deleteShelving(store, { shelvingId }) {
     this.#deleteShelving(shelvingId)
       .then((response) => {
-        this.#deleteShelvesByShelving(shelvingId);
         this.getAllShelving(store);
       })
       .catch((e) => console.error(e));
   }
 
-  /**
-   * Sends API request to add a new shelf; once
-   * this is done, getAllShelves is called to force update
-   */
+  // Shelf
   addShelf(store, { label, shelvingId }) {
     this.#addShelf({ label, shelvingId })
       .then(() => {
@@ -145,10 +118,6 @@ class ShelfService {
       .catch((e) => console.error(e));
   }
 
-  /**
-   * Send API request to delete shelf#shelfId,
-   * then force update by calling getAllShelves
-   */
   deleteShelf(store, { shelfId }) {
     this.#deleteShelf(shelfId)
       .then((response) => {
@@ -159,12 +128,6 @@ class ShelfService {
   }
 
   // Item
-
-  /**
-   * Consumes API to add a new item (label, shelfId)
-   * If successful, it will clear the newItem text input
-   * and update the store with the new shelf information
-   */
   addItem(store, { label, shelfId }) {
     this.#addItem({ label, shelfId })
       .then((response) => {

@@ -25,6 +25,7 @@ export default {
         return Boolean(highlighted);
       },
       set(highlight) {
+        // Send API request to update highlighted status of this item
         let item = this.$props.item;
         item.itemId = item.item_id;
         item.highlighted = highlight;
@@ -32,6 +33,7 @@ export default {
       },
     },
     show() {
+      // Used to filter items by what is typed in searchbar
       const label = this.$props.item.label.toLowerCase();
       const search = this.$store.state.search.toLowerCase();
       return label.includes(search);
