@@ -1,7 +1,11 @@
 <template>
-  <li :class="['Item', { '--Highlight': highlighted }]" v-show="show">
-    <span>{{ item.label }}</span>
-    <input type="checkbox" v-model="highlighted" />
+  <li
+    :class="['Item', { '--Highlight': highlighted }, { '--Active': active }]"
+    v-show="show"
+  >
+    <input class="ItemCheck" type="checkbox" v-model="highlighted" />
+    <div class="ItemLabel" v-on:click="toggleActive">{{ item.label }}</div>
+    <button class="ItemDelete" v-on:click="deleteItem">✖</button>
   </li>
 </template>
 
@@ -9,6 +13,11 @@
 export default {
   name: "Item",
   props: ["item"],
+  data() {
+    return {
+      active: false,
+    };
+  },
   computed: {
     highlighted: {
       get() {
@@ -28,6 +37,16 @@ export default {
       return label.includes(search);
     },
   },
+  methods: {
+    toggleActive() {
+      this.active = !this.active;
+    },
+    deleteItem() {
+      const itemId = this.$props.item.item_id;
+      const shelfId = this.$props.item.shelf_id;
+      this.$ShelfService.deleteItem(this.$store, { itemId, shelfId });
+    },
+  },
 };
 </script>
 
@@ -36,15 +55,38 @@ export default {
   &:not(:last-child) {
     border-bottom: 1px solid #aaa;
   }
-  padding: 0 20px;
+  padding: 0 15px;
   min-height: 40px;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
+  &Label {
+    flex-grow: 1;
+    margin: 0 10px;
+  }
+
+  &Check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+
   &.--Highlight {
     background-color: #ffe70c88;
+  }
+
+  &Delete {
+    display: none;
+    color: red;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+  }
+
+  &.--Active &Delete {
+    display: block;
   }
 }
 </style>

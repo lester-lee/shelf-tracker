@@ -66,6 +66,10 @@ class ShelfService {
     return http.put("/item/", item);
   }
 
+  #deleteItem(itemId) {
+    return http.delete(`/item/${itemId}`);
+  }
+
   //-----------------------------
   // Public methods for components to call
   //-----------------------------
@@ -136,6 +140,14 @@ class ShelfService {
 
   updateItem(store, { item }) {
     this.#updateItem(item).catch((e) => console.error(e));
+  }
+
+  deleteItem(store, { itemId, shelfId }) {
+    this.#deleteItem(itemId)
+      .then(() => {
+        this.#getItemsByShelf(store, shelfId);
+      })
+      .catch((e) => console.error(e));
   }
 }
 

@@ -41,6 +41,7 @@ app.post("/shelving", db.addShelving);
 app.post("/shelf", db.addShelf);
 app.post("/item", db.addItem);
 app.put("/item", db.updateItem);
+app.delete("/item/:itemId", db.deleteItem);
 
 /* Database routes, might be useful later
 

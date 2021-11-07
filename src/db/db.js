@@ -8,7 +8,7 @@ const path = require("path");
 const sqlite = require("sqlite3").verbose();
 const dbFile = path.join(__dirname, "shelves.db");
 const db = new sqlite.Database(dbFile, (error) => {
-  if (error) return console.log(error.message);
+  if (error) return console.error(error.message);
   console.log(`Connected to database ${dbFile}`);
 });
 
@@ -123,12 +123,21 @@ const addItem = (request, response) => {
 
 const updateItem = (request, response) => {
   const { itemId, label, highlighted } = request.body;
-  console.debug(itemId, label, highlighted);
   const query = "UPDATE Item SET label=?, highlighted=? WHERE item_id = ?";
   db.run(
     query,
     [label, highlighted, itemId],
     requestHandler(response, 200, `Item#${itemId} '${label}' updated.'`)
+  );
+};
+
+const deleteItem = (request, response) => {
+  const itemId = parseInt(request.params.itemId);
+  const query = "DELETE FROM Item WHERE item_id = ?";
+  db.run(
+    query,
+    [itemId],
+    requestHandler(response, 200, `Item#${itemId} deleted.`)
   );
 };
 
@@ -145,4 +154,5 @@ module.exports = {
   getAllItems,
   addItem,
   updateItem,
+  deleteItem,
 };
