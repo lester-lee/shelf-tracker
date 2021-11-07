@@ -1,8 +1,11 @@
 <template>
   <li class="Shelf">
-    <h3 class="ShelfLabel">
+    <h3
+      :class="['ShelfLabel', { '--Active': active }]"
+      v-on:click="toggleActive"
+    >
       <span>{{ shelf.label }}</span>
-      <button class="ShelfDelete" v-on:click="deleteShelf">✖</button>
+      <DeleteButton @click="deleteShelf" />
     </h3>
     <ul class="ShelfList">
       <Item v-for="item in items" :key="item.item_id" :item="item" />
@@ -19,15 +22,17 @@
 </template>
 
 <script>
+import DeleteButton from "./DeleteButton";
 import Item from "./Item";
 
 export default {
   name: "Shelf",
   props: ["shelf"],
-  components: { Item },
+  components: { Item, DeleteButton },
   data() {
     return {
       newItem: "",
+      active: false,
     };
   },
   computed: {
@@ -52,19 +57,29 @@ export default {
       const shelfId = this.$props.shelf.shelf_id;
       this.$ShelfService.deleteShelf(this.$store, { shelfId });
     },
+    toggleActive() {
+      this.active = !this.active;
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .Shelf {
-  border-bottom: 1px solid #333;
-  padding: 0;
-  margin: 0;
+  border-radius: 15px;
+
   &Label {
-    border-bottom: 1px solid #333;
-    background: #888;
-    color: #fff;
+    color: $--primary;
+    text-transform: capitalize;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: text-align 1s;
+
+    padding: 0 15px;
+    padding-left: 40px;
+    min-height: 2rem;
   }
 }
 </style>

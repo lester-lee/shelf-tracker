@@ -32,26 +32,32 @@ export default {
   position: fixed;
   bottom: 0;
 
-  background: #333;
-
   display: flex;
+  justify-content: center;
   align-items: center;
+
+  background: $--greyLight-1;
 
   &Input {
     width: 70%;
-    height: 30px;
+    height: 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    padding-left: 2rem;
 
-    outline: 0;
-    border: 0;
-    border-bottom: 1px solid #333;
-    margin-left: 10%;
-    padding-left: 20px;
+    background: none;
+    box-shadow: $inner-shadow;
 
     font-size: 1rem;
-    color: #fff;
+    color: $--greyDark;
 
-    background: #555;
-    border-radius: 5px;
+    &::placeholder {
+      color: $--greyLight-3;
+    }
+    &:focus {
+      outline: none;
+      box-shadow: $shadow;
+    }
   }
 }
 </style>

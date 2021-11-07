@@ -2,7 +2,7 @@
   <li class="Shelving">
     <h2 class="ShelvingLabel">
       {{ shelving.label }}
-      <button class="ShelvingDelete" v-on:click="deleteShelving">✖</button>
+      <div class="Delete" v-on:click="deleteShelving">✖</div>
     </h2>
     <ol class="ShelvingList">
       <Shelf v-for="shelf in shelves" :key="shelf.shelf_id" :shelf="shelf" />
@@ -61,14 +61,22 @@ export default {
 
 <style lang="scss">
 .Shelving {
-  border: 2px solid #333;
-  overflow: auto;
-  max-width: 80vw;
-  margin: 0 auto;
+  width: 80vw; // Change later
+  max-width: 350px;
+
+  margin: 25px auto;
+
+  border-radius: 15px;
+  box-shadow: $shadow;
+
   &Label {
-    border-bottom: 2px solid #333;
-    background-color: #333;
-    color: #fff;
+    //border-bottom: 1px solid $--greyDark;
+    color: $--primary-dark;
+    text-transform: uppercase;
+  }
+
+  &Delete {
+    display: none;
   }
 }
 </style>

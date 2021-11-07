@@ -3,16 +3,25 @@
     :class="['Item', { '--Highlight': highlighted }, { '--Active': active }]"
     v-show="show"
   >
-    <input class="ItemCheck" type="checkbox" v-model="highlighted" />
-    <div class="ItemLabel" v-on:click="toggleActive">{{ item.label }}</div>
-    <button class="ItemDelete" v-on:click="deleteItem">✖</button>
+    <div class="ItemCheck">
+      <input
+        :id="'check' + item.item_id"
+        type="checkbox"
+        v-model="highlighted"
+      />
+      <label :for="'check' + item.item_id"></label>
+    </div>
+    <div class="ItemLabel" @click="toggleActive">{{ item.label }}</div>
+    <DeleteButton v-on:click="deleteItem" />
   </li>
 </template>
 
 <script>
+import DeleteButton from "./DeleteButton";
 export default {
   name: "Item",
   props: ["item"],
+  components: { DeleteButton },
   data() {
     return {
       active: false,
@@ -54,11 +63,8 @@ export default {
 
 <style lang="scss">
 .Item {
-  &:not(:last-child) {
-    border-bottom: 1px solid #aaa;
-  }
   padding: 0 15px;
-  min-height: 40px;
+  min-height: 2rem;
 
   display: flex;
   justify-content: space-between;
@@ -70,25 +76,37 @@ export default {
   }
 
   &Check {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    input {
+      display: none;
+    }
+
+    & input:checked {
+      & ~ label {
+        box-shadow: inset 0.2rem 0.2rem 0.5rem #6d5dfc88,
+          inset -0.2rem -0.2rem 0.5rem #8abdff66;
+        color: $--primary;
+      }
+    }
+
+    label {
+      cursor: pointer;
+      border-radius: 0.5rem;
+      box-shadow: $shadow;
+      width: 1.3rem;
+      height: 1.3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $--greyDark;
+      &:hover {
+        color: $--primary;
+      }
+    }
   }
 
   &.--Highlight {
-    background-color: #ffe70c88;
-  }
-
-  &Delete {
-    display: none;
-    color: red;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-  }
-
-  &.--Active &Delete {
-    display: block;
+    background: $--primary-light;
+    background: #8abdff66;
   }
 }
 </style>
