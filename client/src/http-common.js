@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 module.exports = axios.create({
-  baseURL: "http://192.168.0.202:4000",
+  baseURL: process.env.VUE_APP_SERVER_URL,
   headers: {
     "Content-type": "application/json",
   },

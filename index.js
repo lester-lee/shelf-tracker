@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const db = require("./src/db/db");
+const dotenv = require("dotenv").config();
 
 //-----------------------------
 // App Config
@@ -13,9 +14,16 @@ app.use(express.urlencoded({ extended: true }));
 
 // Handle CORS w/ client
 app.use((req, res, next) => {
-  // Allow Vue client to access
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-
+  // Allow access from multiple origins
+  const allowedOrigins = [
+    "http://localhost:8080",
+    "http://192.168.0.202:8802",
+    "http://192.168.0.201:8802",
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   // Allow specific requests
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -52,7 +60,7 @@ app.delete("/item/:itemId", db.deleteItem);
 // Server
 //-----------------------------
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Listening on port ${PORT}`);
 });

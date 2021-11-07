@@ -15,7 +15,7 @@
     </ul>
     <footer>
       <Searchbar />
-      <ToggleButton @click="toggleEditMode" text="🖉" />
+      <ToggleButton @click="toggleEditMode" text="✎" />
     </footer>
   </main>
 </template>
@@ -70,7 +70,7 @@ export default {
 }
 footer {
   width: 100%;
-  height: 4rem;
+  height: 3.4rem;
 
   position: fixed;
   bottom: 0;
