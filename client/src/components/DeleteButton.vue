@@ -10,20 +10,21 @@ export default {
 
 <style lang="scss">
 .Delete {
-  visibility: hidden;
+  visibility: visible;
   opacity: 0;
   cursor: pointer;
   width: 1.4rem;
   height: 1.4rem;
   border: none;
   background: none;
-  position: relative;
-  right: -30px;
+  position: absolute;
+  right: 0px;
   transition: all 0.2s ease;
+  color: $--greyDark;
 }
-.--Active > .Delete {
+.--Edit .Delete {
   visibility: visible;
   opacity: 1;
-  right: 0;
+  right: 45px;
 }
 </style>

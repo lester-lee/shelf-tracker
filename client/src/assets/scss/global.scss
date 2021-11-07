@@ -29,3 +29,16 @@ h3 {
   align-items: center;
   min-height: 1.5rem;
 }
+
+input[type="text"],
+input[type="search"] {
+  background: none;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: $--primary;
+
+  &:focus {
+    outline: none;
+  }
+}

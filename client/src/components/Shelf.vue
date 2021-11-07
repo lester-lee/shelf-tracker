@@ -1,20 +1,17 @@
 <template>
-  <li class="Shelf">
-    <h3
-      :class="['ShelfLabel', { '--Active': active }]"
-      v-on:click="toggleActive"
-    >
-      <span>{{ shelf.label }}</span>
+  <li :class="['Shelf', { '--Active': active }]">
+    <h3 :class="['ShelfLabel', { '--Active': active }]" @click="toggleActive">
+      <div class="ShelfLabelText">{{ shelf.label }}</div>
       <DeleteButton @click="deleteShelf" />
     </h3>
     <ul class="ShelfList">
       <Item v-for="item in items" :key="item.item_id" :item="item" />
-      <li class="Item">
+      <li class="Item ItemAdd">
         <input
-          class="ItemAdd"
+          type="text"
           placeholder="+ Add Item"
           v-model="newItem"
-          v-on:keypress.enter="onSubmitNewItem"
+          @keypress.enter="onSubmitNewItem"
         />
       </li>
     </ul>
@@ -75,11 +72,37 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: text-align 1s;
 
     padding: 0 15px;
-    padding-left: 40px;
-    min-height: 2rem;
+    padding-left: 2rem;
+    height: 2rem;
+    width: 100%;
+
+    overflow: hidden;
+
+    box-shadow: $shadow;
+
+    transition: all 0.2s ease;
+
+    &Text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &List {
+    padding: 0.5rem 0;
+  }
+
+  &Add {
+    display: none;
+    input {
+      width: 100%;
+    }
+  }
+
+  .--Edit &Add {
+    display: flex;
   }
 }
 </style>

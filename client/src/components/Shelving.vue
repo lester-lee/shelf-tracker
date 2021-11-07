@@ -1,18 +1,18 @@
 <template>
   <li class="Shelving">
     <h2 class="ShelvingLabel">
-      {{ shelving.label }}
-      <div class="Delete" v-on:click="deleteShelving">✖</div>
+      <div class="ShelvingLabelText">{{ shelving.label }}</div>
+      <DeleteButton @click="deleteShelving" />
     </h2>
     <ol class="ShelvingList">
       <Shelf v-for="shelf in shelves" :key="shelf.shelf_id" :shelf="shelf" />
-      <li class="Shelf">
+      <li class="ShelfAdd">
         <h2 class="ShelfLabel">
           <input
-            class="ShelfAdd"
+            type="text"
             placeholder="+ Add Shelf"
             v-model="newShelf"
-            v-on:keypress.enter="onSubmitNewShelf"
+            @keypress.enter="onSubmitNewShelf"
           />
         </h2>
       </li>
@@ -22,11 +22,12 @@
 
 <script>
 import Shelf from "./Shelf";
+import DeleteButton from "./DeleteButton";
 
 export default {
   name: "Shelving",
   props: ["shelving"],
-  components: { Shelf },
+  components: { Shelf, DeleteButton },
   data() {
     return {
       newShelf: "",
@@ -73,10 +74,26 @@ export default {
     //border-bottom: 1px solid $--greyDark;
     color: $--primary-dark;
     text-transform: uppercase;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 3rem;
+    overflow: hidden;
+
+    &Text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
-  &Delete {
+  &Add {
     display: none;
+  }
+
+  .--Edit &Add {
+    display: block;
   }
 }
 </style>

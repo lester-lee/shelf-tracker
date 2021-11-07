@@ -12,7 +12,7 @@
       <label :for="'check' + item.item_id"></label>
     </div>
     <div class="ItemLabel" @click="toggleActive">{{ item.label }}</div>
-    <DeleteButton v-on:click="deleteItem" />
+    <DeleteButton @click="deleteItem" />
   </li>
 </template>
 
@@ -70,6 +70,11 @@ export default {
   justify-content: space-between;
   align-items: center;
 
+  &.--Highlight {
+    background: $--primary-light;
+    background: #8abdff66;
+  }
+
   &Label {
     flex-grow: 1;
     margin: 0 10px;
@@ -104,9 +109,17 @@ export default {
     }
   }
 
-  &.--Highlight {
-    background: $--primary-light;
-    background: #8abdff66;
+  &Add {
+    padding-left: 46px;
+    display: none;
+    align-items: center;
+    input {
+      width: 92%;
+    }
+  }
+
+  .--Edit &Add {
+    display: flex;
   }
 }
 </style>

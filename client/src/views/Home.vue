@@ -1,19 +1,22 @@
 <template>
-  <main id="ShelfApp">
+  <main id="ShelfApp" :class="this.editMode ? '--Edit' : ''">
     <ul id="ShelvingWrapper">
       <Shelving v-for="s in shelving" :key="s.shelving_id" :shelving="s" />
-      <li class="Shelving">
+      <li class="Shelving ShelvingAdd">
         <h2 class="ShelvingLabel">
           <input
-            class="ShelvingAdd"
             placeholder="+ Add Shelving"
+            type="text"
             v-model="newShelving"
-            v-on:keypress.enter="onSubmitNewShelving"
+            @keypress.enter="onSubmitNewShelving"
           />
         </h2>
       </li>
     </ul>
-    <Searchbar />
+    <footer>
+      <Searchbar />
+      <button @click="toggleEditMode">🖉</button>
+    </footer>
   </main>
 </template>
 
@@ -32,6 +35,7 @@ export default {
   data() {
     return {
       newShelving: "",
+      editMode: false,
     };
   },
   computed: {
@@ -51,6 +55,9 @@ export default {
       this.$ShelfService.addShelving(this.$store, { label: this.newShelving });
       this.newShelving = "";
     },
+    toggleEditMode() {
+      this.editMode = !this.editMode;
+    },
   },
 };
 </script>
@@ -58,5 +65,18 @@ export default {
 <style lang="scss">
 #ShelfApp {
   margin-bottom: 80px;
+}
+footer {
+  width: 100%;
+  height: 50px;
+
+  position: fixed;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: $--greyLight-1;
 }
 </style>
