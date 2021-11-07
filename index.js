@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const db = require("./src/db/db");
 
-const PORT = 4000;
+//-----------------------------
+// App Config
+//-----------------------------
 
 // https://stackoverflow.com/questions/23259168/what-are-express-json-and-express-urlencoded
 // Middleware that parses POST / PUT requests from a client
@@ -22,31 +24,35 @@ app.use((req, res, next) => {
   next();
 });
 
+//-----------------------------
+// Database Routes
+//-----------------------------
+
 app.get("/", (req, res) => {
   res.json({ info: "Shelf Tracker" });
 });
 
-//-----------------------------
-// Database Routes
-//-----------------------------
+// Shelving
 app.get("/shelving/all", db.getAllShelving);
-app.get("/shelving/:id", db.getShelvingById);
-app.get("/shelf/in/:shelvingId", db.getShelvesByShelving);
-app.get("/shelf/:id", db.getShelfById);
-app.get("/item/all", db.getAllItems);
-app.get("/item/in/:shelfId", db.getItemsByShelf);
-app.get("/item/:id", db.getItemById);
-
 app.post("/shelving", db.addShelving);
 app.delete("/shelving/:shelvingId", db.deleteShelving);
+
+// Shelf
+app.get("/shelf/in/:shelvingId", db.getShelvesByShelving);
 app.post("/shelf", db.addShelf);
 app.delete("/shelf/:shelfId", db.deleteShelf);
-app.delete("/shelf/in/:shelvingId", db.deleteShelvesByShelving);
+
+// Item
+app.get("/item/in/:shelfId", db.getItemsByShelf);
 app.post("/item", db.addItem);
 app.put("/item", db.updateItem);
 app.delete("/item/:itemId", db.deleteItem);
-app.delete("/item/in/:shelfId", db.deleteItemsByShelf);
 
+//-----------------------------
+// Server
+//-----------------------------
+
+const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
