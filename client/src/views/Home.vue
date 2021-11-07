@@ -15,7 +15,7 @@
     </ul>
     <footer>
       <Searchbar />
-      <button @click="toggleEditMode">🖉</button>
+      <ToggleButton @click="toggleEditMode" text="🖉" />
     </footer>
   </main>
 </template>
@@ -25,12 +25,14 @@
 import { mapState } from "vuex";
 import Shelving from "@/components/Shelving";
 import Searchbar from "@/components/Searchbar";
+import ToggleButton from "@/components/ToggleButton";
 
 export default {
   name: "Home",
   components: {
     Shelving,
     Searchbar,
+    ToggleButton,
   },
   data() {
     return {
@@ -68,14 +70,16 @@ export default {
 }
 footer {
   width: 100%;
-  height: 50px;
+  height: 4rem;
 
   position: fixed;
   bottom: 0;
 
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+
+  padding: 0 10%;
 
   background: $--greyLight-1;
 }

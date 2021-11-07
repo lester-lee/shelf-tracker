@@ -42,3 +42,10 @@ input[type="search"] {
     outline: none;
   }
 }
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: $--greyDark;
+}

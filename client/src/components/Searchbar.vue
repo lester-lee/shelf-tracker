@@ -25,17 +25,17 @@ export default {
 
 <style lang="scss">
 .SearchbarInput {
-    width: 70%;
-    height: 2rem;
-    padding-left: 2rem;
-    box-shadow: $inner-shadow;
+  width: 70%;
+  height: 2rem;
+  padding-left: 2rem;
+  box-shadow: $inner-shadow;
 
-    &::placeholder {
-      color: $--greyLight-3;
-    }
-    &:focus {
-      outline: none;
-      box-shadow: $shadow;
-    }
+  &::placeholder {
+    color: $--greyLight-3;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: $shadow;
+  }
 }
 </style>
